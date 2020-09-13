@@ -77,9 +77,10 @@ int main(int argc, char** argv)
 	std::vector<int, aligned_allocator<int>> source_in(data_size * dim);
 
 	// input data generation
-	std::vector<int,aligned_allocator<int>> v(dim);
-	for(int i = 0; i < dim; i++) 
-		v[i] = 100;
+	// std::vector<int,aligned_allocator<int>> v(dim);
+	// for(int i = 0; i < dim; i++) 
+	// 	v[i] = 100;
+	int v = 100;
 	int value_range = 200;
 
 	// result
@@ -114,7 +115,7 @@ int main(int argc, char** argv)
 
 	// original
 	for (int i = 0 ; i < data_size ; i++) {
-		int dx = v[0] - source_in[i];
+		int dx = v - source_in[i];
 		int dist = dx * dx;
 		for (int m = 0 ; m < k ; m++) {
 			if (k_dist[m] > dist) {
@@ -243,8 +244,8 @@ int main(int argc, char** argv)
 // .......................................................
 // Allocate Global Memory for v (input data)
 // .......................................................
-   OCL_CHECK(err, cl::Buffer buffer_v(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
-            vector_output_size_bytes, v.data(), &err));
+//    OCL_CHECK(err, cl::Buffer buffer_v(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
+//             vector_output_size_bytes, v.data(), &err));
 
    // OCL_CHECK(err, cl::Buffer buffer_output(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
    //         vector_size_bytes, source_hw_results.data(), &err));
@@ -275,7 +276,8 @@ int main(int argc, char** argv)
 	OCL_CHECK(err, err = krnl_knn_2d.setArg(2, data_size));
 	OCL_CHECK(err, err = krnl_knn_2d.setArg(3, k));
 	OCL_CHECK(err, err = krnl_knn_2d.setArg(4, dim));
-	OCL_CHECK(err, err = krnl_knn_2d.setArg(5, buffer_v));
+	// OCL_CHECK(err, err = krnl_knn_2d.setArg(5, buffer_v));
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(5, v));
 
 	begin = std::chrono::steady_clock::now();
 

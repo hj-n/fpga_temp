@@ -48,7 +48,7 @@ void knn(
 		int size,
 		int k,
 		int dim,
-		const int* v
+		int v
 
         )
 {
@@ -133,7 +133,7 @@ void knn(
 
 		for (int j = 0; j < chunk_size ; j++) {
 			int x = in_buffer[j];
-			int dist = (v[0] - x) * (v[0] - x);
+			int dist = (v - x) * (v - x);
 			
 			for (int m = 0 ; m < k ; m++) {
 				if (k_dist_buffer[m] > dist) {

@@ -47,7 +47,7 @@ void knn(
 		// int k,
 		// int v1,
 		// int v2
-		const unsigned int** in, 
+		const unsigned int* in, 
 		unsigned int* out,
 		int size,
 		int k,
@@ -109,7 +109,7 @@ void knn(
 
 		read: for (int j = 0; j < chunk_size; j++) {
 			for(int m = 0; m < dim; m++) {
-				in_buffer[j][m] = in[i + j][m];
+				in_buffer[j][m] = in[i + j + m];
 			}
 		}
 

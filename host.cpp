@@ -73,10 +73,8 @@ int main(int argc, char** argv)
 	// std::vector<int,aligned_allocator<int>> source_hw_results(k);
 
 	// enhanced (dim-D dataset) ver. dynamic allocation
-	int** source_in = new int*[data_size];
-	for(int i = 0; i < data_size; i++) {
-		source_in[i] = new int[dim];
-	}
+	// 2D, but OpenCL buffers should 1D array - so...
+	std::vector<int, aligned_allocator<int>> source_in(data_size * dim);
 
 	// input data generation
 	std::vector<int,aligned_allocator<int>> v(dim);
@@ -104,7 +102,7 @@ int main(int argc, char** argv)
     // Create the test data 
     for (int i = 0 ; i < data_size ; i++){
 		for(int j = 0; j < dim; j++) {
-			source_in[i][j] = rand() % value_range;
+			source_in[i + j] = rand() % value_range;
 		}
         // source_in1[i] = rand() % value_range;
         // source_in2[i] = rand() % value_range;
@@ -137,7 +135,7 @@ int main(int argc, char** argv)
 		// calculating distance
 		int dist = 0;
 		for (int j = 0; j < dim; j++) {
-			int dj = v[j] - source_in[i][j];
+			int dj = v[j] - source_in[i + j];
 			dist += dj * dj;
 		}
 		for(int m = 0; m < k; m++) {
@@ -331,7 +329,7 @@ int main(int argc, char** argv)
 
 		int dist = 0;
 		for (int j = 0; j < dim; j++) {
-			int dj = v[j] - source_in[idx][j];
+			int dj = v[j] - source_in[idx + j];
 			dist += dj * dj;
 		}
 

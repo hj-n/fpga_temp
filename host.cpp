@@ -146,6 +146,7 @@ int main(int argc, char** argv)
 				}
 				k_idx[m] = i;
 				k_dist[m] = dist;
+				std::cout << "CHANGED DIST: " << dist << std::endl;
 				break;
 			}
 		}

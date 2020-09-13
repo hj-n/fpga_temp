@@ -80,7 +80,7 @@ void knn(
 	#pragma HLS INTERFACE s_axilite port=return bundle=control
 
 
-    unsigned int in_buffer[BUFFER_SIZE * dim];	
+    unsigned int in_buffer[BUFFER_SIZE][dim];	
 	unsigned int k_idx_buffer[BUFFER_OUTPUT_SIZE]; 
 	int k_dist_buffer[BUFFER_OUTPUT_SIZE];
 
@@ -109,14 +109,14 @@ void knn(
 
 		read: for (int j = 0; j < chunk_size; j++) {
 			for(int m = 0; m < dim; m++) {
-				in_buffer[j * dim + m] = in[(i + j) * dim + m];
+				in_buffer[j][m] = in[(i + j) * dim + m];
 			}
 		}
 
 		for (int j = 0; j < chunk_size; j++) {
 			int dist = 0;
 			for(int m = 0; m < dim; m++) {
-				int dj = v[m] - in_buffer[j * dim + m];
+				int dj = v[m] - in_buffer[j][m];
 				dist += dj * dj;
 			}
 

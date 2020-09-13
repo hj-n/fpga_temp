@@ -151,12 +151,12 @@ void knn(
 				k_dist_buffer[0] = dist;
 			}
 			if(i + j == 420) {
-				k_idx_buffer[0] = i + j;
-				k_dist_buffer[0] = dist;
+				k_idx_buffer[1] = i + j;
+				k_dist_buffer[1] = dist;
 			}
 			if(i + j == 460) {
-				k_idx_buffer[0] = i + j;
-				k_dist_buffer[0] = dist;
+				k_idx_buffer[2] = i + j;
+				k_dist_buffer[2] = dist;
 			}
 		}
     }

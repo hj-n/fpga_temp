@@ -43,12 +43,12 @@ void knn(
 		// int k,
 		// int v1,
 		// int v2
-		const unsigned int* in, 
-		unsigned int* out,
+		const int* in, 
+		int* out,
 		int size,
 		int k,
 		int dim,
-		const unsigned int* v
+		const int* v
 
         )
 {
@@ -76,8 +76,8 @@ void knn(
 	#pragma HLS INTERFACE s_axilite port=return bundle=control
 
 
-    unsigned int in_buffer[BUFFER_SIZE * dim];	
-	unsigned int k_idx_buffer[BUFFER_OUTPUT_SIZE]; 
+    int in_buffer[BUFFER_SIZE * dim];	
+	int k_idx_buffer[BUFFER_OUTPUT_SIZE]; 
 	int k_dist_buffer[BUFFER_OUTPUT_SIZE];
 
 

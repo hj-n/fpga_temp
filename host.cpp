@@ -331,7 +331,7 @@ int main(int argc, char** argv)
 
 		int dist = 0;
 		for (int j = 0; j < dim; j++) {
-			int dj = v[j] - source_in[idx * dim + j];
+			int dj = v - source_in[idx * dim + j];
 			dist += dj * dj;
 		}
 

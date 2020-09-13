@@ -108,7 +108,7 @@ int main(int argc, char** argv)
         // source_in2[i] = rand() % value_range;
 	}
 
-	
+	std::cout << "FIRST ELEMENT: " << source_in[0] << std::endl;
 
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 

@@ -285,7 +285,8 @@ int main(int argc, char** argv)
 // Step 2: Copy Input data from Host to Global Memory on the device
 // ------------------------------------------------------
     // OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_in1, buffer_in2},0/* 0 means from host*/));	
-    OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_in, buffer_v},0/* 0 means from host*/));	
+    // OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_in, buffer_v},0/* 0 means from host*/));	
+    OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_in},0/* 0 means from host*/));	
 	
 // ----------------------------------------
 // Step 2: Submit Kernels for Execution

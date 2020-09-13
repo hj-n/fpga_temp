@@ -50,15 +50,12 @@ void knn(
         )
 {
 #pragma HLS INTERFACE m_axi port=in1  offset=slave bundle=gmem
-#pragma HLS INTERFACE m_axi port=in2  offset=slave bundle=gmem
 #pragma HLS INTERFACE m_axi port=out offset=slave bundle=gmem
 #pragma HLS INTERFACE s_axilite port=in1  bundle=control
-#pragma HLS INTERFACE s_axilite port=in2  bundle=control
 #pragma HLS INTERFACE s_axilite port=out bundle=control
 #pragma HLS INTERFACE s_axilite port=size bundle=control
 #pragma HLS INTERFACE s_axilite port=k bundle=control
 #pragma HLS INTERFACE s_axilite port=v1 bundle=control
-#pragma HLS INTERFACE s_axilite port=v2 bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 
     unsigned int v1_buffer[BUFFER_SIZE];    // Local memory to store vector1

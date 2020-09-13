@@ -45,9 +45,9 @@ int main(int argc, char** argv)
 	// int v2 = 100;
 	int value_range = 200;
 
-   	int data_size = atoi(argv[2]);
+   	// int data_size = atoi(argv[2]);
 
-//	int data_size = 4096;
+	int data_size = 4096;
 
     std::string binaryFile = argv[1];
     // size_t vector_size_bytes = sizeof(int) * DATA_SIZE;

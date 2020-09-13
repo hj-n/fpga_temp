@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 	// k value
 	int k = 3;
 	// dimension
-	int dim = 4;
+	int dim = 1;
 
 	//int v1 = 100;
 	//int v2 = 100;

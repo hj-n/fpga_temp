@@ -76,7 +76,7 @@ void knn(
 	#pragma HLS INTERFACE s_axilite port=return bundle=control
 
 
-    int in_buffer[BUFFER_SIZE * dim];	
+    int in_buffer[BUFFER_SIZE];	
 	int k_idx_buffer[BUFFER_OUTPUT_SIZE]; 
 	int k_dist_buffer[BUFFER_OUTPUT_SIZE];
 

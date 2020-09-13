@@ -48,11 +48,7 @@ int main(int argc, char** argv)
 	//int v1 = 100;
 	//int v2 = 100;
 
-	// input data generation
-	int* v = new int[dim];
-	for(int i = 0; i < dim; i++) 
-		v[i] = 100;
-	int value_range = 200;
+
 
    	//int data_size = atoi(argv[2]);
 
@@ -81,7 +77,18 @@ int main(int argc, char** argv)
 	for(int i = 0; i < data_size; i++) {
 		source_in[i] = new int[dim];
 	}
+
+	// input data generation
+	std::vector<int,aligned_allocator<int>> v(dim);
+	for(int i = 0; i < dim; i++) 
+		v[i] = 100;
+	int value_range = 200;
+
+	// result
 	std::vector<int,aligned_allocator<int>> source_hw_results(k);
+
+
+
 
 	std::cout << "K : " << k << std::endl;
 	// std::cout << "Input point (x, y) : (" << v1 << ", "  << v2 << ")"<< std::endl;
@@ -269,7 +276,8 @@ int main(int argc, char** argv)
 	OCL_CHECK(err, err = krnl_knn_2d.setArg(1, buffer_output))
 	OCL_CHECK(err, err = krnl_knn_2d.setArg(2, data_size));
 	OCL_CHECK(err, err = krnl_knn_2d.setArg(3, k));
-	OCL_CHECK(err, err = krnl_knn_2d.setArg(4, buffer_v));
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(4, dim));
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(5, buffer_v));
 
 	begin = std::chrono::steady_clock::now();
 
@@ -327,7 +335,7 @@ int main(int argc, char** argv)
 			dist += dj * dj;
 		}
 
-		std::cout << idx <<  " (" << x << " , " << y << "), " << dist << std::endl;
+		std::cout << dist << std::endl;
 		if (k_dist[i] != dist) {
 			match = false;
 		}

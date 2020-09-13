@@ -105,7 +105,7 @@ void knn(
 
 		read: for (int j = 0; j < chunk_size; j++) {
 			for(int m = 0; m < dim; m++) {
-				in_buffer[j][m] = in[i + j + m];
+				in_buffer[j][m] = in[(i + j) * dim + m];
 			}
 		}
 

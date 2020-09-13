@@ -40,17 +40,24 @@ int main(int argc, char** argv)
 	
 	//std::cout << "argv[2] : " << argv[2] << std::endl;
 
+	// k value
 	int k = 3;
+	// dimension
+	int dim = 1000;
+
 	//int v1 = 100;
 	//int v2 = 100;
+
+	// input data generation
+	int* v = new int[dim];
+	for(int i = 0; i < dim; i++) 
+		v[i] = 100;
 	int value_range = 200;
 
    	//int data_size = atoi(argv[2]);
 
     int data_size = 4096;
 	
-	// dimension
-	int dim = 1000;
 	
 
     std::string binaryFile = argv[1];
@@ -63,12 +70,22 @@ int main(int argc, char** argv)
 	// Allocate Memory in Host Memory
     // std::vector<int,aligned_allocator<int>> source_in1(DATA_SIZE);
     // std::vector<int,aligned_allocator<int>> source_in2(DATA_SIZE);
-    std::vector<int,aligned_allocator<int>> source_in1(data_size);
-    std::vector<int,aligned_allocator<int>> source_in2(data_size);
+
+	// original (2D dataset)
+    // std::vector<int,aligned_allocator<int>> source_in1(data_size);
+    // std::vector<int,aligned_allocator<int>> source_in2(data_size);
+	// std::vector<int,aligned_allocator<int>> source_hw_results(k);
+
+	// enhanced (dim-D dataset) ver. dynamic allocation
+	int** source_in = new int*[data_size];
+	for(int i = 0; i < data_size; i++) {
+		source_in[i] = new int[dim];
+	}
 	std::vector<int,aligned_allocator<int>> source_hw_results(k);
 
 	std::cout << "K : " << k << std::endl;
-	std::cout << "Input point (x, y) : (" << v1 << ", "  << v2 << ")"<< std::endl;
+	// std::cout << "Input point (x, y) : (" << v1 << ", "  << v2 << ")"<< std::endl;
+	std::cout << "Dimension : " << dim << std::endl;
     std::cout << "Data size : " << data_size << std::endl;
     
 	int k_idx[32];
@@ -79,19 +96,46 @@ int main(int argc, char** argv)
 
     // Create the test data 
     for (int i = 0 ; i < data_size ; i++){
-        source_in1[i] = rand() % value_range;
-        source_in2[i] = rand() % value_range;
+		for(int j = 0; j < dim; j++) {
+			source_in[i][j] = rand() % value_range;
+		}
+        // source_in1[i] = rand() % value_range;
+        // source_in2[i] = rand() % value_range;
 	}
+
+	
 
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-	for (int i = 0 ; i < data_size ; i++) {
-		int dx = v1 - source_in1[i];
-		int dy = v2 - source_in2[i];
-		int dist = dx * dx + dy * dy;
-		for (int m = 0 ; m < k ; m++) {
-			if (k_dist[m] > dist) {
-				for (int n = k - 1; n > m ; n--) {
+	// original
+	// for (int i = 0 ; i < data_size ; i++) {
+	// 	int dx = v1 - source_in1[i];
+	// 	int dy = v2 - source_in2[i];
+	// 	int dist = dx * dx + dy * dy;
+	// 	for (int m = 0 ; m < k ; m++) {
+	// 		if (k_dist[m] > dist) {
+	// 			for (int n = k - 1; n > m ; n--) {
+	// 				k_idx[n] = k_idx[n - 1];
+	// 				k_dist[n] = k_dist[n - 1];
+	// 			}
+	// 			k_idx[m] = i;
+	// 			k_dist[m] = dist;
+	// 			break;
+	// 		}
+	// 	}
+    // }
+
+	// enhanced
+	for (int i = 0; i < data_size; i++) {
+		// calculating distance
+		int dist = 0;
+		for (int j = 0; j < dim; j++) {
+			int dj = v[j] - source_in[i][j];
+			dist += dj * dj;
+		}
+		for(int m = 0; m < k; m++) {
+			if(k_dist[m] > dist) {
+				for(int n = k - 1; n > m; n--) {
 					k_idx[n] = k_idx[n - 1];
 					k_dist[n] = k_dist[n - 1];
 				}
@@ -100,7 +144,10 @@ int main(int argc, char** argv)
 				break;
 			}
 		}
-    }
+	}
+
+
+
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::cout << "[CPU Calculation] Elapsed Time (ms) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1000
@@ -163,21 +210,36 @@ int main(int argc, char** argv)
 //             o) buffer_ouput - stores Results
 // ------------------------------------------------------------------	
 
+// // .......................................................
+// // Allocate Global Memory for source_in1
+// // .......................................................	
+//     OCL_CHECK(err, cl::Buffer buffer_in1   (context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
+//             vector_size_bytes, source_in1.data(), &err));
+// // .......................................................
+// // Allocate Global Memory for source_in2
+// // .......................................................
+//     OCL_CHECK(err, cl::Buffer buffer_in2   (context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
+//             vector_size_bytes, source_in2.data(), &err));
+
+
 // .......................................................
-// Allocate Global Memory for source_in1
-// .......................................................	
-    OCL_CHECK(err, cl::Buffer buffer_in1   (context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
-            vector_size_bytes, source_in1.data(), &err));
+// Allocate Global Memory for source_in
 // .......................................................
-// Allocate Global Memory for source_in2
-// .......................................................
-    OCL_CHECK(err, cl::Buffer buffer_in2   (context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
-            vector_size_bytes, source_in2.data(), &err));
+   OCL_CHECK(err, cl::Buffer buffer_in(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
+            vector_output_size_bytes, source_in.data(), &err));
+
+
 // .......................................................
 // Allocate Global Memory for sourcce_hw_results
 // .......................................................
    OCL_CHECK(err, cl::Buffer buffer_output(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
             vector_output_size_bytes, source_hw_results.data(), &err));
+
+// .......................................................
+// Allocate Global Memory for v (input data)
+// .......................................................
+   OCL_CHECK(err, cl::Buffer buffer_v(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
+            vector_output_size_bytes, v.data(), &err));
 
    // OCL_CHECK(err, cl::Buffer buffer_output(context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
    //         vector_size_bytes, source_hw_results.data(), &err));
@@ -196,21 +258,26 @@ int main(int argc, char** argv)
 //         o) Submit Kernels for Execution
 //         o) Copy Results from Global Memory, device to Host
 // ============================================================================	
-    int size = data_size;
-    OCL_CHECK(err, err = krnl_knn_2d.setArg(0, buffer_in1));
-    OCL_CHECK(err, err = krnl_knn_2d.setArg(1, buffer_in2));
-    OCL_CHECK(err, err = krnl_knn_2d.setArg(2, buffer_output));
-    OCL_CHECK(err, err = krnl_knn_2d.setArg(3, size));
-    OCL_CHECK(err, err = krnl_knn_2d.setArg(4, k));
-    OCL_CHECK(err, err = krnl_knn_2d.setArg(5, v1));
-    OCL_CHECK(err, err = krnl_knn_2d.setArg(6, v2));
+    // OCL_CHECK(err, err = krnl_knn_2d.setArg(0, buffer_in1));
+    // OCL_CHECK(err, err = krnl_knn_2d.setArg(1, buffer_in2));
+    // OCL_CHECK(err, err = krnl_knn_2d.setArg(2, buffer_output));
+    // OCL_CHECK(err, err = krnl_knn_2d.setArg(3, size));
+    // OCL_CHECK(err, err = krnl_knn_2d.setArg(4, k));
+    // OCL_CHECK(err, err = krnl_knn_2d.setArg(5, v1));
+    // OCL_CHECK(err, err = krnl_knn_2d.setArg(6, v2));
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(0, buffer_in));
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(1, buffer_output))
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(2, data_size));
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(3, k));
+	OCL_CHECK(err, err = krnl_knn_2d.setArg(4, buffer_v));
 
 	begin = std::chrono::steady_clock::now();
 
 // ------------------------------------------------------
 // Step 2: Copy Input data from Host to Global Memory on the device
 // ------------------------------------------------------
-    OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_in1, buffer_in2},0/* 0 means from host*/));	
+    // OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_in1, buffer_in2},0/* 0 means from host*/));	
+    OCL_CHECK(err, err = q.enqueueMigrateMemObjects({buffer_in, buffer_v},0/* 0 means from host*/));	
 	
 // ----------------------------------------
 // Step 2: Submit Kernels for Execution
@@ -250,9 +317,16 @@ int main(int argc, char** argv)
     bool match = true;
 	for (int i = 0 ; i < k; i++) {
 		int idx = source_hw_results[i];
-		int x = source_in1[idx];
-		int y = source_in2[idx];
-		int dist = (x - v1) * (x - v1) + (y - v2) * (y - v2);
+		// int x = source_in1[idx];
+		// int y = source_in2[idx];
+		// int dist = (x - v1) * (x - v1) + (y - v2) * (y - v2);
+
+		int dist = 0;
+		for (int j = 0; j < dim; j++) {
+			int dj = v[j] - source_in[idx][j];
+			dist += dj * dj;
+		}
+
 		std::cout << idx <<  " (" << x << " , " << y << "), " << dist << std::endl;
 		if (k_dist[i] != dist) {
 			match = false;

@@ -40,13 +40,19 @@ Description:
 
 extern "C" {
 void knn(
-        const unsigned int *in1, // Read-Only Vector 1
-        const unsigned int *in2, // Read-Only Vector 2
-        unsigned int *out,       // Output Result
-        int size,                // Size in integer
+        // const unsigned int *in1, // Read-Only Vector 1
+        // const unsigned int *in2, // Read-Only Vector 2
+        // unsigned int *out,       // Output Result
+        // int size,                // Size in integer
+		// int k,
+		// int v1,
+		// int v2
+		const unsigned int** in, 
+		unsigned int* out,
+		int size,
 		int k,
-		int v1,
-		int v2
+		const unsigned int* v
+
         )
 {
 #pragma HLS INTERFACE m_axi port=in1  offset=slave bundle=gmem
@@ -60,6 +66,9 @@ void knn(
 #pragma HLS INTERFACE s_axilite port=v1 bundle=control
 #pragma HLS INTERFACE s_axilite port=v2 bundle=control
 #pragma HLS INTERFACE s_axilite port=return bundle=control
+
+
+
 
     unsigned int v1_buffer[BUFFER_SIZE];    // Local memory to store vector1
     unsigned int v2_buffer[BUFFER_SIZE];    // Local memory to store vector2

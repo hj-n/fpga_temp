@@ -109,33 +109,13 @@ void knn(
 			}
 		}
 
-		for (int j = 0; j < chunk_size; j++) {
-			int dist = 0;
-			for(int m = 0; m < dim; m++) {
-				int dj = v[m] - in_buffer[j * dim + m];
-				dist += dj * dj;
-			}
+		// for (int j = 0; j < chunk_size; j++) {
+		// 	int dist = 0;
+		// 	for(int m = 0; m < dim; m++) {
+		// 		int dj = v[m] - in_buffer[j * dim + m];
+		// 		dist += dj * dj;
+		// 	}
 
-			for (int m = 0 ; m < k ; m++) {
-				if (k_dist_buffer[m] > dist) {
-					for (int n = k - 1 ; n > m ; n--) {
-						k_idx_buffer[n] = k_idx_buffer[n - 1];
-						k_dist_buffer[n] = k_dist_buffer[n - 1];
-					}
-					k_idx_buffer[m] = i + j;
-					k_dist_buffer[m] = dist;
-					break;
-				}
-			}
-
-
-		}
-
-		// for (int j = 0; j < chunk_size ; j++) {
-		// 	int x = v1_buffer[j];
-		// 	int y = v2_buffer[j];
-		// 	int dist = (v1 - x) * (v1 - x) + (v2 - y) * (v2 - y);
-			
 		// 	for (int m = 0 ; m < k ; m++) {
 		// 		if (k_dist_buffer[m] > dist) {
 		// 			for (int n = k - 1 ; n > m ; n--) {
@@ -147,7 +127,26 @@ void knn(
 		// 			break;
 		// 		}
 		// 	}
+
+
 		// }
+
+		for (int j = 0; j < chunk_size ; j++) {
+			int x = in_buffer[j];
+			int dist = (v[0] - x) * (v[0] - x);
+			
+			for (int m = 0 ; m < k ; m++) {
+				if (k_dist_buffer[m] > dist) {
+					for (int n = k - 1 ; n > m ; n--) {
+						k_idx_buffer[n] = k_idx_buffer[n - 1];
+						k_dist_buffer[n] = k_dist_buffer[n - 1];
+					}
+					k_idx_buffer[m] = i + j;
+					k_dist_buffer[m] = dist;
+					break;
+				}
+			}
+		}
     }
 
 	write: for (int i = 0 ; i < k ; i++) {

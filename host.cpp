@@ -102,7 +102,7 @@ int main(int argc, char** argv)
     // Create the test data 
     for (int i = 0 ; i < data_size ; i++){
 		for(int j = 0; j < dim; j++) {
-			source_in[i + j] = rand() % value_range;
+			source_in[i * dim + j] = rand() % value_range;
 		}
         // source_in1[i] = rand() % value_range;
         // source_in2[i] = rand() % value_range;
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 		// calculating distance
 		int dist = 0;
 		for (int j = 0; j < dim; j++) {
-			int dj = v[j] - source_in[i + j];
+			int dj = v[j] - source_in[i * dim + j];
 			dist += dj * dj;
 		}
 		for(int m = 0; m < k; m++) {
@@ -329,7 +329,7 @@ int main(int argc, char** argv)
 
 		int dist = 0;
 		for (int j = 0; j < dim; j++) {
-			int dj = v[j] - source_in[idx + j];
+			int dj = v[j] - source_in[idx * dim + j];
 			dist += dj * dj;
 		}
 

@@ -333,7 +333,8 @@ int main(int argc, char** argv)
 			dist += dj * dj;
 		}
 
-		std::cout << dist << std::endl;
+		std::cout << "TEST " << i  << ": "<< k_dist[i] << " : " <<dist << std::endl;
+		std::cout << "TEST idx: " << k_idx[i] << " and " << idx << endl;
 		if (k_dist[i] != dist) {
 			match = false;
 		}

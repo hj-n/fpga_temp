@@ -33,10 +33,10 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int main(int argc, char** argv)
 {
-    if (argc != 3) {
-        std::cout << "Usage: " << argv[0] << " <XCLBIN File> <DATA SIZE>" << std::endl;
-		return EXIT_FAILURE;
-	}
+    // if (argc != 2) {
+    //     std::cout << "Usage: " << argv[0] << " <XCLBIN File> <DATA SIZE>" << std::endl;
+	// 	return EXIT_FAILURE;
+	// }
 	
 	//std::cout << "argv[2] : " << argv[2] << std::endl;
 

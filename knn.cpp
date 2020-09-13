@@ -112,7 +112,7 @@ void knn(
 		for (int j = 0; j < chunk_size; j++) {
 			int dist = 0;
 			for(int m = 0; m < dim; m++) {
-				int dj = in_buffer[j * dim + m] - v[m];
+				int dj = v[m] - in_buffer[j * dim + m];
 				dist += dj * dj;
 			}
 

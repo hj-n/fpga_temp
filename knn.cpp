@@ -87,7 +87,7 @@ void knn(
 	// int k_dist_buffer[BUFFER_OUTPUT_SIZE];
 	
 	for (int i = 0 ; i < k; i++) {
-		k_dist_buffer[i] = 100000000;
+		k_dist_buffer[i] = 10000;
 	}
 
     for (int i = 0; i < size; i += BUFFER_SIZE)

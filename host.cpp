@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 // -------------------------------------------------------------
 // Step 1: Create Kernels
 // -------------------------------------------------------------
-    OCL_CHECK(err, cl::Kernel krnl_knn_2d(program,"knn-enhance", &err));
+    OCL_CHECK(err, cl::Kernel krnl_knn_2d(program,"knn", &err));
 
 // ================================================================
 // Step 2: Setup Buffers and run Kernels

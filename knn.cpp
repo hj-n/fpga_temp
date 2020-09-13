@@ -135,29 +135,18 @@ void knn(
 			int x = in_buffer[j];
 			int dist = (v[0] - x) * (v[0] - x);
 			
-			// for (int m = 0 ; m < k ; m++) {
-			// 	if (k_dist_buffer[m] > dist) {
-			// 		for (int n = k - 1 ; n > m ; n--) {
-			// 			k_idx_buffer[n] = k_idx_buffer[n - 1];
-			// 			k_dist_buffer[n] = k_dist_buffer[n - 1];
-			// 		}
-			// 		k_idx_buffer[m] = i + j;
-			// 		k_dist_buffer[m] = dist;
-			// 		break;
-			// 	}
-			// }
-			if(i + j == 167) {
-				k_idx_buffer[0] = i + j;
-				k_dist_buffer[0] = dist;
+			for (int m = 0 ; m < k ; m++) {
+				if (k_dist_buffer[m] > dist) {
+					for (int n = k - 1 ; n > m ; n--) {
+						k_idx_buffer[n] = k_idx_buffer[n - 1];
+						k_dist_buffer[n] = k_dist_buffer[n - 1];
+					}
+					k_idx_buffer[m] = i + j;
+					k_dist_buffer[m] = dist;
+					break;
+				}
 			}
-			if(i + j == 420) {
-				k_idx_buffer[1] = i + j;
-				k_dist_buffer[1] = dist;
-			}
-			if(i + j == 460) {
-				k_idx_buffer[2] = i + j;
-				k_dist_buffer[2] = dist;
-			}
+		
 		}
     }
 

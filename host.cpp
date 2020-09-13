@@ -113,44 +113,43 @@ int main(int argc, char** argv)
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
 	// original
-	// for (int i = 0 ; i < data_size ; i++) {
-	// 	int dx = v1 - source_in1[i];
-	// 	int dy = v2 - source_in2[i];
-	// 	int dist = dx * dx + dy * dy;
-	// 	for (int m = 0 ; m < k ; m++) {
-	// 		if (k_dist[m] > dist) {
-	// 			for (int n = k - 1; n > m ; n--) {
-	// 				k_idx[n] = k_idx[n - 1];
-	// 				k_dist[n] = k_dist[n - 1];
-	// 			}
-	// 			k_idx[m] = i;
-	// 			k_dist[m] = dist;
-	// 			break;
-	// 		}
-	// 	}
-    // }
-
-	// enhanced
-	for (int i = 0; i < data_size; i++) {
-		// calculating distance
-		int dist = 0;
-		for (int j = 0; j < dim; j++) {
-			int dj = v[j] - source_in[i * dim + j];
-			dist += dj * dj;
-		}
-		for(int m = 0; m < k; m++) {
-			if(k_dist[m] > dist) {
-				for(int n = k - 1; n > m; n--) {
+	for (int i = 0 ; i < data_size ; i++) {
+		int dx = v[0] - source_in[i];
+		int dist = dx * dx;
+		for (int m = 0 ; m < k ; m++) {
+			if (k_dist[m] > dist) {
+				for (int n = k - 1; n > m ; n--) {
 					k_idx[n] = k_idx[n - 1];
 					k_dist[n] = k_dist[n - 1];
 				}
 				k_idx[m] = i;
 				k_dist[m] = dist;
-				std::cout << "CHANGED DIST: " << dist << std::endl;
 				break;
 			}
 		}
-	}
+    }
+
+	// enhanced
+	// for (int i = 0; i < data_size; i++) {
+	// 	// calculating distance
+	// 	int dist = 0;
+	// 	for (int j = 0; j < dim; j++) {
+	// 		int dj = v[j] - source_in[i * dim + j];
+	// 		dist += dj * dj;
+	// 	}
+	// 	for(int m = 0; m < k; m++) {
+	// 		if(k_dist[m] > dist) {
+	// 			for(int n = k - 1; n > m; n--) {
+	// 				k_idx[n] = k_idx[n - 1];
+	// 				k_dist[n] = k_dist[n - 1];
+	// 			}
+	// 			k_idx[m] = i;
+	// 			k_dist[m] = dist;
+	// 			std::cout << "CHANGED DIST: " << dist << std::endl;
+	// 			break;
+	// 		}
+	// 	}
+	// }
 
 
 
